@@ -43,6 +43,36 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'documentos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/documentos'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'empleados' => [
+            'driver' => 'local',
+            'root' => storage_path('app/empleados'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'documentosEmpleados' => [
+            'driver' => 'local',
+            'root' => storage_path('app/documentos-empleados'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'clientes' => [
+            'driver' => 'local',
+            'root' => storage_path('app/clientes'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'documentosClientes' => [
+            'driver' => 'local',
+            'root' => storage_path('app/documentos-clientes'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

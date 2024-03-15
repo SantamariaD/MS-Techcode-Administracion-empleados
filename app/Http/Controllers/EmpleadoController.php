@@ -72,7 +72,7 @@ class EmpleadoController extends Controller
             $empleado->extension = $extension;
 
             $archivo->storeAs(
-                "/" . $request->uuidBD,
+                "/",
                 $UUID . '.' . $extension,
                 'empleados'
             );
@@ -151,7 +151,7 @@ class EmpleadoController extends Controller
         EmpleadoLaborales::create($request->all());
 
         $namedb = $request->header('nombredb');
-        $empleadosRespuesta = $this->consultarEmpleadoBD($namedb);
+        $empleadosRespuesta = $this->consultarEmpleados();
 
         return response()->json(Respuestas::respuesta200('Empleados encontrados.', $empleadosRespuesta));
     }
@@ -275,7 +275,7 @@ class EmpleadoController extends Controller
             'descripcion' => $request->descripcion,
         ];
 
-        if ($request->hasFile('imagen') && isset($request->uuidBD)) {
+        if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
             $UUID = Str::orderedUuid();
             $extension = $archivo->getClientOriginalExtension();
@@ -283,7 +283,7 @@ class EmpleadoController extends Controller
             $datosActualizados['extension'] = $extension;
 
             if (isset($request->nombreImagen)) {
-                $rutaArchivo = $request->uuidBD . '/' .
+                $rutaArchivo =
                     $request->nombreImagen . '.' .
                     $request->extension;
 
@@ -292,7 +292,7 @@ class EmpleadoController extends Controller
             }
 
             $archivo->storeAs(
-                "/" . $request->uuidBD,
+                "", 
                 $UUID . '.' . $extension,
                 'empleados'
             );
@@ -321,7 +321,7 @@ class EmpleadoController extends Controller
         Empleado::where('id', $request->input('id'))
             ->update($datosActualizados);
 
-        $empleados = $this->consultarEmpleadoBD($request->header('nombredb'));
+        $empleados = $this->consultarEmpleados();
 
         return response()->json(Respuestas::respuesta200('Empleado actualizado.', $empleados));
     }
@@ -370,7 +370,7 @@ class EmpleadoController extends Controller
         EmpleadoLaborales::where('idEmpleado', $request->input('idEmpleado'))
             ->update($datosActualizados);
 
-        $empleados = $this->consultarEmpleadoBD($request->header('nombredb'));
+        $empleados = $this->consultarEmpleados();
 
         return response()->json(
             Respuestas::respuesta200('Información Laboral del Empleado actualizado.', $empleados)
@@ -387,7 +387,7 @@ class EmpleadoController extends Controller
 
         $empleado->delete();
 
-        $empleados = $this->consultarEmpleadoBD($request->header('nombredb'));
+        $empleados = $this->consultarEmpleados();
 
         return response()->json(Respuestas::respuesta200('Empleado eliminado', $empleados), 201);
     }
@@ -738,9 +738,7 @@ class EmpleadoController extends Controller
                 'catalogo_bancos.nombre AS nombreBancoClabe',
                 'sucursales.nombreSucursal'
             )
-            ->orderBy('apellido_paterno')
-            ->orderBy('apellido_materno')
-            ->orderBy('nombres')
+            ->orderBy('empleados.id')
             ->get();
 
         $empleadosRespuesta = [];
